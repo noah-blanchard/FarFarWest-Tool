@@ -1,0 +1,11 @@
+{
+  "process": "FarFarWest-Win64-Shipping",
+  "pointers": {
+    "spell_cooldown_1": {
+      "staticOffset": "0x08E36438",
+      "offsets": ["0xE8", "0xF0", "0x1C8", "0x290", "0x3EC"],
+      "type": "int",
+      "description": "Spell Cooldown - Slot 1"
+    }
+  }
+}
