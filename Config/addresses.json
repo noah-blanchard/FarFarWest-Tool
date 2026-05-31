@@ -10,8 +10,7 @@
       "label": "Cooldown Slot 1",
       "group": "Spells",
       "behaviour": "freeze",
-      "value": 0,
-      "hotkey": "F1"
+      "value": 0
     },
     "spell_cooldown_2": {
       "baseKey": "spell_cooldown_1",
@@ -20,8 +19,7 @@
       "label": "Cooldown Slot 2",
       "group": "Spells",
       "behaviour": "freeze",
-      "value": 0,
-      "hotkey": "F2"
+      "value": 0
     },
     "spell_cooldown_3": {
       "baseKey": "spell_cooldown_1",
@@ -30,8 +28,7 @@
       "label": "Cooldown Slot 3",
       "group": "Spells",
       "behaviour": "freeze",
-      "value": 0,
-      "hotkey": "F3"
+      "value": 0
     },
     "freeze_all_spells": {
       "behaviour": "groupToggle",
@@ -47,8 +44,7 @@
       "label": "Infinite Primary Ammo",
       "group": "Ammo",
       "behaviour": "freeze",
-      "value": 999,
-      "hotkey": "F4"
+      "value": 999
     },
     "infinite_primary_ammo_1": {
       "baseKey": "infinite_primary_ammo_0",
@@ -57,8 +53,7 @@
       "label": "Infinite Secondary Ammo",
       "group": "Ammo",
       "behaviour": "freeze",
-      "value": 999,
-      "hotkey": "F5"
+      "value": 999
     },
     "infinite_secondary_ammo_0": {
       "baseKey": "infinite_primary_ammo_0",
@@ -67,18 +62,16 @@
       "label": "Infinite Special Ammo",
       "group": "Ammo",
       "behaviour": "freeze",
-      "value": 999,
-      "hotkey": "F6"
+      "value": 999
     },
     "infinite_secondary_ammo_1": {
-      "baseKey": "infinite_secondary_ammo_0",
+      "baseKey": "infinite_primary_ammo_0",
       "postOffset": "0x1C",
       "type": "int",
       "label": "Infinite Special Ammo",
       "group": "Ammo",
       "behaviour": "freeze",
-      "value": 999,
-      "hotkey": "F7"
+      "value": 999
     },
     "freeze_all_ammo": {
       "behaviour": "groupToggle",
@@ -86,6 +79,51 @@
       "label": "Freeze All Ammo",
       "group": "Ammo",
       "hotkey": "F8"
+    },
+    "stat_max_ammo": {
+      "staticOffset": "0x0928E2F8",
+      "offsets": ["0x30", "0x2F0", "0x8C", "0x318", "0x8", "0x8"],
+      "type": "float",
+      "label": "Max Ammo Stat",
+      "group": "Stats",
+      "behaviour": "set",
+      "hotkey": "F10"
+    },
+    "stat_max_health": {
+      "baseKey": "stat_max_ammo",
+      "postOffset": "0x14",
+      "type": "float",
+      "label": "Max Health",
+      "group": "Stats",
+      "behaviour": "set",
+      "hotkey": "F11"
+    },
+    "stat_max_jump": {
+      "baseKey": "stat_max_ammo",
+      "postOffset": "0x28",
+      "type": "float",
+      "label": "Max Jump",
+      "group": "Stats",
+      "behaviour": "set",
+      "hotkey": "F12"
+    },
+    "stat_max_speed": {
+      "baseKey": "stat_max_ammo",
+      "postOffset": "0x3C",
+      "type": "float",
+      "label": "Max Speed",
+      "group": "Stats",
+      "behaviour": "set",
+      "hotkey": "NumPad0"
+    },
+    "stat_spell_cd": {
+      "baseKey": "stat_max_ammo",
+      "postOffset": "0x50",
+      "type": "float",
+      "label": "Spell CD Stat",
+      "group": "Stats",
+      "behaviour": "set",
+      "hotkey": "NumPad1"
     }
   }
 }

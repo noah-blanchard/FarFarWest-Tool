@@ -10,6 +10,7 @@ public static class FeatureRegistry
         ["freeze"]      = new FreezeBehaviour(),
         ["add"]         = new AddBehaviour(),
         ["minus"]       = new MinusBehaviour(),
+        ["set"]         = new SetBehaviour(),
         ["groupToggle"] = new GroupToggleBehaviour(),
     };
 

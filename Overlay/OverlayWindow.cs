@@ -184,6 +184,18 @@ public sealed class OverlayWindow : IDisposable
             _hotkeys.Register(captured.Hotkey, captured.Behaviour.HotkeyMode,
                 () => captured.Behaviour.Execute(_mem, _resolver, captured));
         }
+
+        // Global P/M keys — increment/decrement the currently-selected 'set' entry
+        _hotkeys.Register(Keys.P, HotkeyMode.OneShot, () =>
+        {
+            var editing = _instances.FirstOrDefault(i => i.IsActive && i.Behaviour is SetBehaviour);
+            if (editing != null) editing.PendingValue += 1;
+        });
+        _hotkeys.Register(Keys.M, HotkeyMode.OneShot, () =>
+        {
+            var editing = _instances.FirstOrDefault(i => i.IsActive && i.Behaviour is SetBehaviour);
+            if (editing != null) editing.PendingValue -= 1;
+        });
     }
 
     // ── Render ────────────────────────────────────────────────────────────────
@@ -241,6 +253,16 @@ public sealed class OverlayWindow : IDisposable
         float sw = ImGui.CalcTextSize(sub).X;
         ImGui.SetCursorPosX((ContentWidth - sw) * 0.5f + 8);
         ImGui.TextColored(ColInactive, sub);
+
+        ImGui.Spacing();
+        ImGui.PushStyleColor(ImGuiCol.Button,        new Vector4(0.55f, 0.10f, 0.10f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.80f, 0.15f, 0.15f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.ButtonActive,  new Vector4(0.95f, 0.20f, 0.20f, 1f));
+        float btnW = 60f;
+        ImGui.SetCursorPosX((ContentWidth - btnW) * 0.5f + 8);
+        if (ImGui.Button("Close", new Vector2(btnW, 0)))
+            _window!.Close();
+        ImGui.PopStyleColor(3);
         ImGui.Spacing();
     }
 
@@ -289,6 +311,28 @@ public sealed class OverlayWindow : IDisposable
 
             ImGui.SameLine();
             ImGui.TextColored(col, $"{label}  [{keyName}]");
+        }
+        else if (inst.Behaviour is SetBehaviour)
+        {
+            string setKeyName = inst.Hotkey.ToString();
+            if (!inst.IsActive)
+            {
+                // Idle — show label + hotkey hint
+                ImGui.TextColored(ColInactive, $"{label}  [{setKeyName}] edit");
+                ImGui.SameLine(ContentWidth - 55);
+                double cur = MemoryWriter.ReadAsDouble(_resolver, inst.Key, inst.Entry.Type);
+                ImGui.TextColored(ColInactive, $"{cur:F1}");
+            }
+            else
+            {
+                // Edit mode — highlighted, P/M adjust pending value, hotkey commits
+                ImGui.TextColored(ColActive, $">> {label}  [P]+1  [M]-1  [{setKeyName}] write");
+                ImGui.SameLine(ContentWidth - 72);
+                float pv = (float)inst.PendingValue;
+                ImGui.SetNextItemWidth(68);
+                if (ImGui.InputFloat($"##pv_{inst.Key}", ref pv, 0f, 0f, "%.1f"))
+                    inst.PendingValue = pv;
+            }
         }
         else if (inst.Behaviour is FreezeBehaviour)
         {

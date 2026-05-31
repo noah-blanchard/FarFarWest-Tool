@@ -18,5 +18,8 @@ public sealed class FeatureInstance
     public List<FeatureInstance>? Targets { get; set; }
 
     /// <summary>Mutable at runtime — editable from the overlay UI.</summary>
-    public double            RuntimeValue { get; set; }
+    public double            RuntimeValue  { get; set; }
+
+    /// <summary>Staged value for 'set' behaviour — adjusted with P/M before writing.</summary>
+    public double            PendingValue  { get; set; }
 }

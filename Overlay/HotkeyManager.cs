@@ -33,6 +33,9 @@ public enum Keys
     F11 = 0x7A,
     F12 = 0x7B,
 
+    P = 0x50,
+    M = 0x4D,
+
     Insert = 0x2D,
     Delete = 0x2E,
     Home   = 0x24,
