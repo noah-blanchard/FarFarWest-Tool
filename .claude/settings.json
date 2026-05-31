@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem \"C:\\\\Users\\\\matan\\\\.nuget\\\\packages\\\\veldrid.imgui\" -ErrorAction SilentlyContinue)",
+      "Bash(Select-Object Name)",
+      "Bash(Get-Content \"C:\\\\Users\\\\matan\\\\.nuget\\\\packages\\\\veldrid.imgui\\\\5.65.0\\\\veldrid.imgui.nuspec\" -ErrorAction SilentlyContinue)",
+      "Bash(Select-String \"ImGui\")",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\matan\\\\.nuget\\\\packages\\\\veldrid.imgui\" | Select-Object Name; \\(Get-Content \"C:\\\\Users\\\\matan\\\\.nuget\\\\packages\\\\veldrid.imgui\\\\5.65.0\\\\veldrid.imgui.nuspec\"\\) | Select-String \"ImGui\")",
+      "Read(//c/Users/matan/.nuget/packages/veldrid.imgui/5.65.0/**)",
+      "Read(//c/Users/matan/.nuget/packages/veldrid.imgui/5.72.0/**)",
+      "Read(//c/Users/matan/.nuget/packages/veldrid/**)"
+    ]
+  }
+}

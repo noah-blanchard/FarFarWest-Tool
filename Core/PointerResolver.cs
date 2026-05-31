@@ -33,6 +33,33 @@ public sealed class PointerEntry
     [JsonPropertyName("description")]
     public string Description { get; init; } = string.Empty;
 
+    [JsonPropertyName("label")]
+    public string Label { get; init; } = string.Empty;
+
+    [JsonPropertyName("group")]
+    public string Group { get; init; } = string.Empty;
+
+    [JsonPropertyName("behaviour")]
+    public string Behaviour { get; init; } = string.Empty;
+
+    [JsonPropertyName("value")]
+    public double Value { get; init; } = 0.0;
+
+    [JsonPropertyName("hotkey")]
+    public string Hotkey { get; init; } = string.Empty;
+
+    /// <summary>Refers to another pointer entry — resolved address is anchor + postOffset.</summary>
+    [JsonPropertyName("baseKey")]
+    public string BaseKey { get; init; } = string.Empty;
+
+    /// <summary>Offset added to the final resolved address (hex string, ex: "0x8").</summary>
+    [JsonPropertyName("postOffset")]
+    public string PostOffset { get; init; } = "0x0";
+
+    [JsonIgnore]
+    public long PostOffsetValue =>
+        Convert.ToInt64(PostOffset.Replace("0x", ""), 16);
+
     /// <summary>Parse le staticOffset en long depuis la string hex</summary>
     [JsonIgnore]
     public long StaticOffsetValue =>
@@ -46,6 +73,9 @@ public sealed class AddressConfig
 {
     [JsonPropertyName("process")]
     public string Process { get; init; } = "FarFarWest-Win64-Shipping";
+
+    [JsonPropertyName("overlayToggleKey")]
+    public string OverlayToggleKey { get; init; } = "Insert";
 
     [JsonPropertyName("pointers")]
     public Dictionary<string, PointerEntry> Pointers { get; init; } = [];
@@ -132,6 +162,11 @@ public sealed class PointerResolver
     /// </summary>
     public string ProcessName => _config.Process;
 
+    /// <summary>
+    /// Config complète — exposée pour FeatureRegistry.
+    /// </summary>
+    public AddressConfig Config => _config;
+
     // ── Résolution ────────────────────────────────────────────────────────────
 
     /// <summary>
@@ -146,15 +181,26 @@ public sealed class PointerResolver
         if (!_config.Pointers.TryGetValue(key, out var entry))
             throw new KeyNotFoundException($"Pointer key '{key}' not found in config.");
 
-        var address = _mem.Resolve(entry.StaticOffsetValue, entry.OffsetValues);
+        IntPtr address;
 
-        var result = new ResolvedPointer
+        if (!string.IsNullOrEmpty(entry.BaseKey))
         {
-            Key     = key,
-            Address = address,
-            Entry   = entry
-        };
+            if (entry.BaseKey == key)
+                throw new InvalidOperationException($"Circular baseKey on '{key}'.");
 
+            var anchor = Resolve(entry.BaseKey);
+            address = anchor.IsValid
+                ? anchor.Address + (nint)entry.PostOffsetValue
+                : IntPtr.Zero;
+        }
+        else
+        {
+            address = _mem.Resolve(entry.StaticOffsetValue, entry.OffsetValues);
+            if (entry.PostOffsetValue != 0 && address != IntPtr.Zero)
+                address += (nint)entry.PostOffsetValue;
+        }
+
+        var result = new ResolvedPointer { Key = key, Address = address, Entry = entry };
         _cache[key] = result;
         return result;
     }

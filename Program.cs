@@ -1,15 +1,6 @@
 ﻿using FarFarWestTool.Core;
 using FarFarWestTool.Overlay;
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Bootstrap
-// ─────────────────────────────────────────────────────────────────────────────
-
-Console.Title = "FarFarWest Tool";
-Console.WriteLine("=== FarFarWest Tool ===");
-Console.WriteLine($".NET {Environment.Version}");
-Console.WriteLine();
-
 // ── Memory + Config ───────────────────────────────────────────────────────────
 
 using var mem = new MemoryManager();

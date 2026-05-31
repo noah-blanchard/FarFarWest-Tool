@@ -1,11 +1,37 @@
 {
   "process": "FarFarWest-Win64-Shipping",
+  "overlayToggleKey": "Insert",
   "pointers": {
     "spell_cooldown_1": {
       "staticOffset": "0x08E36438",
       "offsets": ["0xE8", "0xF0", "0x1C8", "0x290", "0x3EC"],
       "type": "int",
-      "description": "Spell Cooldown - Slot 1"
+      "description": "Spell Cooldown - Slot 1",
+      "label": "Cooldown Slot 1",
+      "group": "Spells",
+      "behaviour": "freeze",
+      "value": 0,
+      "hotkey": "F1"
+    },
+    "spell_cooldown_2": {
+      "baseKey": "spell_cooldown_1",
+      "postOffset": "0x8",
+      "type": "int",
+      "label": "Cooldown Slot 2",
+      "group": "Spells",
+      "behaviour": "freeze",
+      "value": 0,
+      "hotkey": "F2"
+    },
+    "spell_cooldown_3": {
+      "baseKey": "spell_cooldown_1",
+      "postOffset": "0x10",
+      "type": "int",
+      "label": "Cooldown Slot 3",
+      "group": "Spells",
+      "behaviour": "freeze",
+      "value": 0,
+      "hotkey": "F3"
     }
   }
 }

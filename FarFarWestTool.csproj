@@ -10,10 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ImGui.NET"                  Version="1.90.0.1" />
+    <PackageReference Include="ImGui.NET"                  Version="1.72.0"   />
     <PackageReference Include="Veldrid"                    Version="4.9.0"    />
     <PackageReference Include="Veldrid.StartupUtilities"   Version="4.9.0"    />
-    <PackageReference Include="Veldrid.ImGui"              Version="4.9.0"    />
+    <PackageReference Include="Veldrid.ImGui"              Version="5.72.0"   />
     <PackageReference Include="SDL2-CS"                    Version="2.0.0"    />
     <PackageReference Include="Newtonsoft.Json"            Version="13.0.3"   />
   </ItemGroup>
