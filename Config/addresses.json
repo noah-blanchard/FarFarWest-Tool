@@ -32,6 +32,60 @@
       "behaviour": "freeze",
       "value": 0,
       "hotkey": "F3"
+    },
+    "freeze_all_spells": {
+      "behaviour": "groupToggle",
+      "targets": ["spell_cooldown_1", "spell_cooldown_2", "spell_cooldown_3"],
+      "label": "Freeze All Spells",
+      "group": "Spells",
+      "hotkey": "F9"
+    },
+    "infinite_primary_ammo_0": {
+      "staticOffset": "0x0928E2F8",
+      "offsets": ["0x30", "0x238", "0x0", "0xA8", "0x2B8", "0x3BC"],
+      "type": "int",
+      "label": "Infinite Primary Ammo",
+      "group": "Ammo",
+      "behaviour": "freeze",
+      "value": 999,
+      "hotkey": "F4"
+    },
+    "infinite_primary_ammo_1": {
+      "baseKey": "infinite_primary_ammo_0",
+      "postOffset": "0x8",
+      "type": "int",
+      "label": "Infinite Secondary Ammo",
+      "group": "Ammo",
+      "behaviour": "freeze",
+      "value": 999,
+      "hotkey": "F5"
+    },
+    "infinite_secondary_ammo_0": {
+      "baseKey": "infinite_primary_ammo_0",
+      "postOffset": "0x14",
+      "type": "int",
+      "label": "Infinite Special Ammo",
+      "group": "Ammo",
+      "behaviour": "freeze",
+      "value": 999,
+      "hotkey": "F6"
+    },
+    "infinite_secondary_ammo_1": {
+      "baseKey": "infinite_secondary_ammo_0",
+      "postOffset": "0x1C",
+      "type": "int",
+      "label": "Infinite Special Ammo",
+      "group": "Ammo",
+      "behaviour": "freeze",
+      "value": 999,
+      "hotkey": "F7"
+    },
+    "freeze_all_ammo": {
+      "behaviour": "groupToggle",
+      "targets": ["infinite_primary_ammo_0", "infinite_primary_ammo_1", "infinite_secondary_ammo_0", "infinite_secondary_ammo_1"],
+      "label": "Freeze All Ammo",
+      "group": "Ammo",
+      "hotkey": "F8"
     }
   }
 }

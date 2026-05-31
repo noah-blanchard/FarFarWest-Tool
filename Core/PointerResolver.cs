@@ -48,6 +48,10 @@ public sealed class PointerEntry
     [JsonPropertyName("hotkey")]
     public string Hotkey { get; init; } = string.Empty;
 
+    /// <summary>For groupToggle behaviour — keys of entries controlled by this toggle.</summary>
+    [JsonPropertyName("targets")]
+    public string[] Targets { get; init; } = [];
+
     /// <summary>Refers to another pointer entry — resolved address is anchor + postOffset.</summary>
     [JsonPropertyName("baseKey")]
     public string BaseKey { get; init; } = string.Empty;

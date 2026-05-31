@@ -179,6 +179,7 @@ public sealed class OverlayWindow : IDisposable
 
         foreach (var inst in _instances)
         {
+            if (inst.IsGroupMember) continue; // hotkey owned by the group toggle
             var captured = inst;
             _hotkeys.Register(captured.Hotkey, captured.Behaviour.HotkeyMode,
                 () => captured.Behaviour.Execute(_mem, _resolver, captured));
@@ -258,7 +259,9 @@ public sealed class OverlayWindow : IDisposable
                 ImGui.Separator();
             }
 
-            foreach (var inst in group)
+            // Group toggles rendered first, then individual entries
+            var ordered = group.OrderByDescending(i => i.Behaviour is GroupToggleBehaviour);
+            foreach (var inst in ordered)
                 RenderRow(inst);
 
             ImGui.Spacing();
@@ -270,9 +273,26 @@ public sealed class OverlayWindow : IDisposable
         string label   = string.IsNullOrEmpty(inst.Entry.Label) ? inst.Key : inst.Entry.Label;
         string keyName = inst.Hotkey.ToString();
 
-        if (inst.Behaviour is FreezeBehaviour)
+        if (inst.Behaviour is GroupToggleBehaviour)
         {
-            // Checkbox toggles IsActive directly (mirrors the hotkey)
+            // Master toggle row — checkbox + bold label + hotkey, no value field
+            bool active = inst.IsActive;
+            var  col    = active ? ColActive : ColTitle;
+
+            ImGui.PushStyleColor(ImGuiCol.CheckMark, col);
+            if (ImGui.Checkbox($"##chk_{inst.Key}", ref active))
+            {
+                inst.IsActive = active;
+                inst.Targets?.ForEach(t => t.IsActive = active);
+            }
+            ImGui.PopStyleColor();
+
+            ImGui.SameLine();
+            ImGui.TextColored(col, $"{label}  [{keyName}]");
+        }
+        else if (inst.Behaviour is FreezeBehaviour)
+        {
+            // Freeze row — checkbox, hotkey shown only if not group-managed
             bool active = inst.IsActive;
             var  col    = active ? ColActive : ColInactive;
 
@@ -282,7 +302,8 @@ public sealed class OverlayWindow : IDisposable
             ImGui.PopStyleColor();
 
             ImGui.SameLine();
-            ImGui.TextColored(col, $"{label}  [{keyName}]");
+            string suffix = inst.IsGroupMember ? string.Empty : $"  [{keyName}]";
+            ImGui.TextColored(col, $"{label}{suffix}");
 
             // Editable freeze value (right-aligned)
             ImGui.SameLine(ContentWidth - 55);
@@ -293,9 +314,10 @@ public sealed class OverlayWindow : IDisposable
         }
         else
         {
-            // Button fires Execute immediately
-            string sign = inst.Behaviour is MinusBehaviour ? "-" : "+";
-            if (ImGui.Button($"{sign}  {label}  [{keyName}]##btn_{inst.Key}"))
+            // Add / Minus row — button fires Execute
+            string sign   = inst.Behaviour is MinusBehaviour ? "-" : "+";
+            string suffix = inst.IsGroupMember ? string.Empty : $"  [{keyName}]";
+            if (ImGui.Button($"{sign}  {label}{suffix}##btn_{inst.Key}"))
                 inst.Behaviour.Execute(_mem, _resolver, inst);
 
             // Editable delta value (right-aligned)
