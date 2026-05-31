@@ -1,21 +1,43 @@
-﻿using System.Diagnostics;
-using FarFarWestTool.Core;
+﻿using FarFarWestTool.Core;
+using FarFarWestTool.Overlay;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Bootstrap
+// ─────────────────────────────────────────────────────────────────────────────
+
+Console.Title = "FarFarWest Tool";
+Console.WriteLine("=== FarFarWest Tool ===");
+Console.WriteLine($".NET {Environment.Version}");
+Console.WriteLine();
+
+// ── Memory + Config ───────────────────────────────────────────────────────────
 
 using var mem = new MemoryManager();
-mem.Attach("FarFarWest-Win64-Shipping");
+var resolver  = new PointerResolver(mem);
 
-var proc = Process.GetProcessesByName("FarFarWest-Win64-Shipping")[0];
-
-var resolver = new PointerResolver(mem);
-var configPath = Path.Combine(
-    AppContext.BaseDirectory,
-    "Config",
-    "addresses.json"
-);
+var configPath = Path.Combine(AppContext.BaseDirectory, "Config", "addresses.json");
 resolver.LoadConfig(configPath);
+
+// ── Attente du jeu ────────────────────────────────────────────────────────────
+
+Console.WriteLine($"En attente de '{resolver.ProcessName}'...");
+
+while (!mem.EnsureAttached(resolver.ProcessName))
+{
+    Console.Write(".");
+    Thread.Sleep(2000);
+}
+
+Console.WriteLine();
+Console.WriteLine($"Attaché ! ModuleBase = 0x{mem.ModuleBase:X}");
+Console.WriteLine();
+
+// ── Status des pointer chains ─────────────────────────────────────────────────
 
 resolver.PrintStatus();
 
-var currency = resolver.Read<int>("spell_cooldown_1");
-Console.WriteLine($"Spell Cooldown 1 : {currency}");
-Console.ReadKey();
+// ── Overlay ───────────────────────────────────────────────────────────────────
+
+using var overlay = new OverlayWindow(mem, resolver);
+overlay.Initialize();
+overlay.Run();
